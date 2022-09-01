@@ -24,3 +24,23 @@ function simulate_one_trajectory(T)
         end
     return Dynare.simul_first_order!(Y, y0, X, c, A, B, T)
 end
+
+#To generate storage for iteration_nbr matrices X and matrices Y
+Xs = Matrix{Float64}[]
+Ys = Matrix{Float64}[]
+
+iteration_nbr = 5
+
+for i in 1:iteration_nbr
+    X = zeros(T+1, m.exogenous_nbr)
+    Y = zeros(T+1, m.endogenous_nbr)
+    push!(Xs, X)
+    push!(Ys, Y)
+end
+
+simulate_several_trajectory = []
+
+for i in 1:iteration_nbr
+    myres = simulate_one_trajectory(Ys, y0, Xs, c, A, B, T)
+    push!(simulate_several_trajectory, myres)
+end
